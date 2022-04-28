@@ -4,6 +4,9 @@ import se.iths.complexjavaproject.entity.Address;
 import org.springframework.stereotype.Service;
 import se.iths.complexjavaproject.repository.AddressRepository;
 
+import javax.persistence.EntityExistsException;
+import java.util.Optional;
+
 @Service
 public class AddressService {
     private final AddressRepository addressRepository;
@@ -14,4 +17,14 @@ public class AddressService {
     public Address createAddress(Address address){
         return addressRepository.save(address);
     }
+
+
+    public Optional<Address> getAddressById(Long id){return addressRepository.findById(id);}
+
+    public void deleteAddress(Long id){Address result = addressRepository.findById(id).orElseThrow(EntityExistsException::new);
+    addressRepository.deleteById(result.getId());}
+
+    public Iterable<Address> getAllAddresses(){return addressRepository.findAll();}
+
+
 }

@@ -39,4 +39,10 @@ public class Category {
     public void setItems(Set<Item> items) {
         this.items = items;
     }
+
+    public void addItem(Item item){this.items.add(item);}
+
+    public void addMultipleItems(Set<Item> itemsToAdd){
+        items.addAll(itemsToAdd);
+        }
 }
