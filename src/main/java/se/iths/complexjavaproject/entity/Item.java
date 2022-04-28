@@ -14,6 +14,9 @@ public class Item {
     private Set<Category> categories;
     private double price;
 
+    @ManyToOne
+    private OrderItems orderItems;
+
     public Item() {
     }
 

@@ -12,7 +12,7 @@ public class Address {
     private String postalCode;
     private String city;
 
-    @OneToOne
+    @OneToOne(mappedBy = "address")
     private User user;
 
     public Address() {

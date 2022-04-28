@@ -9,8 +9,11 @@ public class OrderItems {
     @Id
     @GeneratedValue(strategy = GenerationType.AUTO)
     private Long id;
-    @OneToMany
+    @OneToMany(mappedBy = "orderItems")
     private Set<Item> items;
+
+    @OneToOne(mappedBy = "orderItems")
+    private Order order;
 
     public OrderItems() {
     }
@@ -33,5 +36,13 @@ public class OrderItems {
 
     public void addItem(Item item){
         this.items.add(item);
+    }
+
+    public Order getOrder() {
+        return order;
+    }
+
+    public void setOrder(Order order) {
+        this.order = order;
     }
 }

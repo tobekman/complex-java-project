@@ -12,6 +12,8 @@ public class Order {
     private OrderItems orderItems;
     private double orderPrice;
     private LocalDate createdAt;
+    @ManyToOne
+    private User user;
 
     @PrePersist
     public void getCurrentDate() {
