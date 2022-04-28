@@ -5,6 +5,7 @@ import org.springframework.stereotype.Service;
 import se.iths.complexjavaproject.repository.AddressRepository;
 
 import javax.persistence.EntityExistsException;
+import javax.persistence.EntityNotFoundException;
 import java.util.Optional;
 
 @Service
@@ -19,12 +20,18 @@ public class AddressService {
     }
 
 
-    public Optional<Address> getAddressById(Long id){return addressRepository.findById(id);}
+    public Optional<Address> getAddressById(Long id){
+        return addressRepository.findById(id);
+    }
 
-    public void deleteAddress(Long id){Address result = addressRepository.findById(id).orElseThrow(EntityExistsException::new);
-    addressRepository.deleteById(result.getId());}
+    public void deleteAddress(Long id){
+        Address result = addressRepository.findById(id).orElseThrow(EntityNotFoundException::new);
+    addressRepository.deleteById(result.getId());
+    }
 
-    public Iterable<Address> getAllAddresses(){return addressRepository.findAll();}
+    public Iterable<Address> getAllAddresses(){
+        return addressRepository.findAll();
+    }
 
 
 }
