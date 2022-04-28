@@ -11,7 +11,7 @@ import java.io.FileNotFoundException;
 import java.util.Optional;
 
 @RestController
-@RequestMapping("api/1.0/")
+@RequestMapping("item")
 public class ItemController {
 
     private final ItemService itemService;

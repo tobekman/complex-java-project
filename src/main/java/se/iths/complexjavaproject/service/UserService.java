@@ -25,11 +25,11 @@ public class UserService {
     }
 
 
-    public Optional<User> getOrderById(Long id){return userRepository.findById(id);}
+    public Optional<User> getUserById(Long id){return userRepository.findById(id);}
 
-    public void deleteOrder(Long id){User result = userRepository.findById(id).orElseThrow(EntityExistsException::new);
+    public void deleteUser(Long id){User result = userRepository.findById(id).orElseThrow(EntityExistsException::new);
         userRepository.deleteById(result.getId());}
 
-    public Iterable<User> getAllOrders(){return userRepository.findAll();}
+    public Iterable<User> getAllUsers(){return userRepository.findAll();}
 }
 

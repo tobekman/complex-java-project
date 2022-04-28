@@ -11,9 +11,9 @@ import java.util.Optional;
 
 @RestController
 @RequestMapping("address")
-public class AdressController {
+public class AddressController {
     private final AddressService addressService;
-    public AdressController(AddressService addressService){this.addressService = addressService;}
+    public AddressController(AddressService addressService){this.addressService = addressService;}
 
 
     @PostMapping("")
