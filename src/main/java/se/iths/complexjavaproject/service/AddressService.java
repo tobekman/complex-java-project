@@ -1,8 +1,8 @@
-package service;
+package se.iths.complexjavaproject.service;
 
-import entity.Address;
+import se.iths.complexjavaproject.entity.Address;
 import org.springframework.stereotype.Service;
-import repository.AddressRepository;
+import se.iths.complexjavaproject.repository.AddressRepository;
 
 @Service
 public class AddressService {

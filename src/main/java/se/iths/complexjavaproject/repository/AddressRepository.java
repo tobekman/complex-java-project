@@ -1,6 +1,6 @@
-package repository;
+package se.iths.complexjavaproject.repository;
 
-import entity.Address;
+import se.iths.complexjavaproject.entity.Address;
 import org.springframework.data.repository.CrudRepository;
 import org.springframework.stereotype.Repository;
 

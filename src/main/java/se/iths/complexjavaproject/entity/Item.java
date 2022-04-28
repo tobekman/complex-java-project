@@ -1,4 +1,4 @@
-package entity;
+package se.iths.complexjavaproject.entity;
 
 import javax.persistence.*;
 import java.util.Set;

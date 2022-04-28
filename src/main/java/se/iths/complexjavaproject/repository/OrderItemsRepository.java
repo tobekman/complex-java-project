@@ -1,6 +1,6 @@
-package repository;
+package se.iths.complexjavaproject.repository;
 
-import entity.OrderItems;
+import se.iths.complexjavaproject.entity.OrderItems;
 import org.springframework.data.repository.CrudRepository;
 import org.springframework.stereotype.Repository;
 

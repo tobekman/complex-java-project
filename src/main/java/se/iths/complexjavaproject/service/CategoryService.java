@@ -1,13 +1,11 @@
-package service;
+package se.iths.complexjavaproject.service;
 
 
-import entity.Category;
-import entity.Item;
+import se.iths.complexjavaproject.entity.Category;
 import org.springframework.stereotype.Service;
-import repository.CategoryRepository;
+import se.iths.complexjavaproject.repository.CategoryRepository;
 
 @Service
-
 public class CategoryService {
     private final CategoryRepository categoryRepository;
 

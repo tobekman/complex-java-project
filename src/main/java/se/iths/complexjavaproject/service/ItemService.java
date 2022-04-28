@@ -1,8 +1,8 @@
-package service;
+package se.iths.complexjavaproject.service;
 
-import entity.Item;
+import se.iths.complexjavaproject.entity.Item;
 import org.springframework.stereotype.Service;
-import repository.ItemRepository;
+import se.iths.complexjavaproject.repository.ItemRepository;
 
 @Service
 public class ItemService {

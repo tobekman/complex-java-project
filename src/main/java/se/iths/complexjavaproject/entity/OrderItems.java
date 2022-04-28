@@ -1,19 +1,18 @@
-package entity;
+package se.iths.complexjavaproject.entity;
 
 import javax.persistence.*;
 import java.util.Set;
 
 @Entity
-public class Category {
+public class OrderItems {
 
     @Id
     @GeneratedValue(strategy = GenerationType.AUTO)
     private Long id;
-    private String name;
-    @ManyToMany
+    @OneToMany
     private Set<Item> items;
 
-    public Category() {
+    public OrderItems() {
     }
 
     public Long getId() {
@@ -24,19 +23,15 @@ public class Category {
         this.id = id;
     }
 
-    public String getName() {
-        return name;
-    }
-
-    public void setName(String name) {
-        this.name = name;
-    }
-
     public Set<Item> getItems() {
         return items;
     }
 
     public void setItems(Set<Item> items) {
         this.items = items;
+    }
+
+    public void addItem(Item item){
+        this.items.add(item);
     }
 }

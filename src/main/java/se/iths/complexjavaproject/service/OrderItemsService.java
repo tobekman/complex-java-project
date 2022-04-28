@@ -1,9 +1,8 @@
-package service;
+package se.iths.complexjavaproject.service;
 
-import entity.Order;
-import entity.OrderItems;
+import se.iths.complexjavaproject.entity.OrderItems;
 import org.springframework.stereotype.Service;
-import repository.OrderItemsRepository;
+import se.iths.complexjavaproject.repository.OrderItemsRepository;
 
 @Service
 public class OrderItemsService {
