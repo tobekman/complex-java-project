@@ -11,7 +11,7 @@ public class User {
     private Long id;
     private String username;
     private String email;
-    @OneToMany
+    @OneToMany(mappedBy = "user")
     private Set<Order> orders;
     @OneToOne
     private Address address;
