@@ -13,8 +13,10 @@ import org.springframework.web.bind.annotation.RestController;
 import se.iths.complexjavaproject.auth.jwt.JwtProvider;
 import se.iths.complexjavaproject.auth.jwt.JwtResponse;
 import se.iths.complexjavaproject.entity.User;
-import se.iths.complexjavaproject.jms.sender.Sender;
+import se.iths.complexjavaproject.exception.UserAlreadyExistsException;
 import se.iths.complexjavaproject.service.UserService;
+
+import java.util.Optional;
 
 @RestController
 @RequestMapping("auth")
@@ -40,6 +42,13 @@ public class AuthController {
 
     @PostMapping("signup")
     public ResponseEntity<User> createUser(@RequestBody User user) {
+        Optional<User> existingEmail = userService.getUserByEmail(user.getEmail());
+        Optional<User> existingUsername = userService.getUserByUsername(user.getUsername());
+
+        if(existingEmail.isPresent() || existingUsername.isPresent()) {
+            throw new UserAlreadyExistsException("A user with this email and/or username already exists in database");
+        }
+
         User createdUser = userService.createUser(user);
         return new ResponseEntity<>(createdUser, HttpStatus.CREATED);
     }

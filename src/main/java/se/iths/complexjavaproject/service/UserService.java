@@ -39,5 +39,13 @@ public class UserService {
         userRepository.deleteById(result.getId());}
 
     public Iterable<User> getAllUsers(){return userRepository.findAll();}
+
+    public Optional<User> getUserByEmail(String email) {
+        return Optional.ofNullable(userRepository.findByEmail(email));
+    }
+
+    public Optional<User> getUserByUsername(String username) {
+        return Optional.ofNullable(userRepository.findByUsername(username));
+    }
 }
 

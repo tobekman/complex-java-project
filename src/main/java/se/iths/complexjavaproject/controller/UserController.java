@@ -5,6 +5,7 @@ import org.springframework.web.bind.annotation.*;
 import se.iths.complexjavaproject.entity.User;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import se.iths.complexjavaproject.exception.UserNotFoundException;
 import se.iths.complexjavaproject.service.UserService;
 
 import java.io.FileNotFoundException;
@@ -25,6 +26,9 @@ public class UserController {
     @GetMapping("{id}")
     public ResponseEntity<Optional<User>> getUserById(@PathVariable Long id){
         Optional<User> foundUser = userService.getUserById(id);
+        if(foundUser.isEmpty()) {
+            throw new UserNotFoundException("User with id: " + id + " is not found in database.");
+        }
         return new ResponseEntity<>(foundUser, HttpStatus.FOUND);
 
     }
