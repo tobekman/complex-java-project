@@ -1,10 +1,12 @@
 package se.iths.complexjavaproject.controller;
 
+import org.springframework.jms.core.JmsTemplate;
 import org.springframework.web.bind.annotation.*;
 import se.iths.complexjavaproject.entity.Address;
 import se.iths.complexjavaproject.entity.Order;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import se.iths.complexjavaproject.jms.sender.Sender;
 import se.iths.complexjavaproject.service.OrderService;
 
 import java.io.FileNotFoundException;
@@ -15,14 +17,17 @@ import java.util.Optional;
 public class OrderController {
 
     private final OrderService orderService;
+    private final Sender sender;
 
-    public OrderController(OrderService orderService) {
+    public OrderController(OrderService orderService, Sender sender) {
         this.orderService = orderService;
+        this.sender = sender;
     }
 
     @PostMapping
     public ResponseEntity<Order> createOrder(@RequestBody Order order) {
         Order createdOrder = orderService.createOrder(order);
+        sender.sendOrderMessage(order);
         return new ResponseEntity<>(createdOrder, HttpStatus.CREATED);
     }
 

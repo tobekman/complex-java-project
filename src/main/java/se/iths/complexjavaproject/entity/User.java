@@ -1,6 +1,9 @@
 package se.iths.complexjavaproject.entity;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
+
 import javax.persistence.*;
+import java.util.HashSet;
 import java.util.Set;
 
 @Entity
@@ -10,14 +13,30 @@ public class User {
     @GeneratedValue(strategy = GenerationType.AUTO)
     private Long id;
     private String username;
+    private String password;
     private String email;
-    @OneToMany(mappedBy = "user")
+    @OneToMany(mappedBy = "user", cascade = CascadeType.REMOVE)
+    @JsonIgnore
     private Set<Order> orders;
-    @OneToOne
+    @OneToOne(cascade = CascadeType.PERSIST)
     private Address address;
     private String fullName;
+    @ManyToMany(fetch=FetchType.EAGER, cascade = CascadeType.PERSIST)
+    @JsonIgnore
+    private Set<Role> roles = new HashSet<>();
 
     public User() {
+
+    }
+
+    public void addRole(Role role) {
+        this.roles.add(role);
+        role.getUsers().add(this);
+    }
+
+    public void removeRole(Role role) {
+        roles.remove(role);
+        role.getUsers().remove(this);
     }
 
     public Long getId() {
@@ -67,4 +86,22 @@ public class User {
     public void setFullName(String fullName) {
         this.fullName = fullName;
     }
+
+    public String getPassword() {
+        return password;
+    }
+
+    public void setPassword(String password) {
+        this.password = password;
+    }
+
+    public Set<Role> getRoles() {
+        return roles;
+    }
+
+    public void setRoles(Set<Role> roles) {
+        this.roles = roles;
+    }
+
+
 }

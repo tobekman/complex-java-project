@@ -1,5 +1,7 @@
 package se.iths.complexjavaproject.entity;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
+
 import javax.persistence.*;
 
 @Entity
@@ -13,6 +15,7 @@ public class Address {
     private String city;
 
     @OneToOne(mappedBy = "address")
+    @JsonIgnore
     private User user;
 
     public Address() {

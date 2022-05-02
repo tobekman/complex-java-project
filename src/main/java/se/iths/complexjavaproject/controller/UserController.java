@@ -1,7 +1,7 @@
 package se.iths.complexjavaproject.controller;
 
+import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.*;
-import se.iths.complexjavaproject.entity.Address;
 import se.iths.complexjavaproject.entity.User;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -11,7 +11,7 @@ import java.io.FileNotFoundException;
 import java.util.Optional;
 
 @RestController
-@RequestMapping("users")
+@RequestMapping("/users")
 public class UserController {
 
     private final UserService userService;
@@ -20,27 +20,24 @@ public class UserController {
         this.userService = userService;
     }
 
-    @PostMapping
-    public ResponseEntity<User> createUser(@RequestBody User user) {
-        User createdUser = userService.createUser(user);
-        return new ResponseEntity<>(createdUser, HttpStatus.CREATED);
-    }
 
+    @PreAuthorize("hasAnyRole('USER', 'ADMIN')")
     @GetMapping("{id}")
-    public ResponseEntity<Optional<User>> getAddressById(@PathVariable Long id){
+    public ResponseEntity<Optional<User>> getUserById(@PathVariable Long id){
         Optional<User> foundUser = userService.getUserById(id);
         return new ResponseEntity<>(foundUser, HttpStatus.FOUND);
 
     }
 
-
+    @PreAuthorize("hasRole('ADMIN')")
     @DeleteMapping("{id}")
-    public ResponseEntity<Void> deleteAddressById(@PathVariable Long id) throws FileNotFoundException {
+    public ResponseEntity<Void> deleteUserById(@PathVariable Long id) throws FileNotFoundException {
         User foundUser = userService.getUserById(id).orElseThrow(FileNotFoundException::new);
         userService.deleteUser(foundUser.getId());
         return new ResponseEntity<>(HttpStatus.NO_CONTENT);
     }
 
+    @PreAuthorize("hasAnyRole('USER', 'ADMIN')")
     @GetMapping
     public ResponseEntity<Iterable<User>> findAllUsers() {
         Iterable<User> allUsers = userService.getAllUsers();

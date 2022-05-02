@@ -2,7 +2,6 @@ package se.iths.complexjavaproject.service;
 
 import se.iths.complexjavaproject.entity.Order;
 import org.springframework.stereotype.Service;
-import se.iths.complexjavaproject.entity.OrderItems;
 import se.iths.complexjavaproject.repository.OrderRepository;
 
 import javax.persistence.EntityExistsException;

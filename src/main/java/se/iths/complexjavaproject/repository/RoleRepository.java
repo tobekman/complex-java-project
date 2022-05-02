@@ -1,9 +1,10 @@
 package se.iths.complexjavaproject.repository;
 
-import se.iths.complexjavaproject.entity.OrderItems;
 import org.springframework.data.repository.CrudRepository;
 import org.springframework.stereotype.Repository;
+import se.iths.complexjavaproject.entity.Role;
 
 @Repository
-public interface OrderItemsRepository extends CrudRepository<OrderItems, Long> {
+public interface RoleRepository extends CrudRepository<Role, Long> {
+    Role findByName(String name);
 }
