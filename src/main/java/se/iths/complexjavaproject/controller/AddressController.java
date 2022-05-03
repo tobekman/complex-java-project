@@ -10,7 +10,7 @@ import java.io.FileNotFoundException;
 import java.util.Optional;
 
 @RestController
-@RequestMapping("address")
+@RequestMapping("/address")
 public class AddressController {
     private final AddressService addressService;
     public AddressController(AddressService addressService){this.addressService = addressService;}

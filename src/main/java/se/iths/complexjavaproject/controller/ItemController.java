@@ -1,49 +1,60 @@
 package se.iths.complexjavaproject.controller;
 
-import org.springframework.web.bind.annotation.*;
-import se.iths.complexjavaproject.entity.Address;
-import se.iths.complexjavaproject.entity.Item;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.web.bind.annotation.*;
+import se.iths.complexjavaproject.DTO.mapper.Mapper;
+import se.iths.complexjavaproject.DTO.ItemDTO;
+import se.iths.complexjavaproject.entity.Item;
 import se.iths.complexjavaproject.service.ItemService;
 
 import java.io.FileNotFoundException;
+import java.util.List;
 import java.util.Optional;
+import java.util.stream.StreamSupport;
+
+import static java.util.stream.Collectors.toList;
 
 @RestController
-@RequestMapping("item")
+@RequestMapping("/items")
 public class ItemController {
 
     private final ItemService itemService;
+    private Mapper mapper;
 
-    public ItemController(ItemService itemService) {
+    public ItemController(ItemService itemService, Mapper mapper) {
         this.itemService = itemService;
+        this.mapper = mapper;
     }
 
     @PostMapping
-    public ResponseEntity<Item> createItem(@RequestBody Item item) {
+    public ResponseEntity<ItemDTO> createItem(@RequestBody Item item) {
         Item createdItem = itemService.createItem(item);
-        return new ResponseEntity<>(createdItem, HttpStatus.CREATED);
+        ItemDTO itemDTO = (ItemDTO) mapper.toDto(item);
+        return new ResponseEntity<>(itemDTO, HttpStatus.CREATED);
     }
 
     @GetMapping("{id}")
-    public ResponseEntity<Optional<Item>> getAddressById(@PathVariable Long id){
+    public ResponseEntity<Optional<ItemDTO>> getAddressById(@PathVariable Long id){
         Optional<Item> foundItem = itemService.getItemById(id);
-        return new ResponseEntity<>(foundItem, HttpStatus.FOUND);
+        Optional<ItemDTO> itemDTO = (Optional<ItemDTO>) mapper.toDto(foundItem);
+        return new ResponseEntity<>(itemDTO, HttpStatus.FOUND);
 
     }
 
 
     @DeleteMapping("{id}")
     public ResponseEntity<Void> deleteAddressById(@PathVariable Long id) throws FileNotFoundException {
-        Item foundAddress = itemService.getItemById(id).orElseThrow(FileNotFoundException::new);
-        itemService.deleteItem(foundAddress.getId());
+        Item foundItem = itemService.getItemById(id).orElseThrow(FileNotFoundException::new);
+        itemService.deleteItem(foundItem.getId());
         return new ResponseEntity<>(HttpStatus.NO_CONTENT);
     }
 
     @GetMapping
-    public ResponseEntity<Iterable<Item>> findAllUsers() {
-        Iterable<Item> allItems = itemService.getAllItems();
-        return new ResponseEntity<>(allItems, HttpStatus.OK);
+    public ResponseEntity<List<ItemDTO>> findAllUsers() {
+        List allItemsDTO = StreamSupport.stream(itemService.getAllItems().spliterator(), false)
+                .map(mapper::toDto)
+                .collect(toList());
+        return new ResponseEntity<>(allItemsDTO, HttpStatus.OK);
     }
 }

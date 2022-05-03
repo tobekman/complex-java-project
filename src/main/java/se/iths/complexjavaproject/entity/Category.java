@@ -45,4 +45,14 @@ public class Category {
     public void addMultipleItems(Set<Item> itemsToAdd){
         this.items.addAll(itemsToAdd);
         }
+
+
+    @Override
+    public String toString() {
+        return "Category{" +
+                "id=" + id +
+                ", name='" + name + '\'' +
+                ", items=" + items +
+                '}';
+    }
 }

@@ -10,7 +10,7 @@ import java.io.FileNotFoundException;
 import java.util.Optional;
 
 @RestController
-@RequestMapping("category")
+@RequestMapping("/category")
 public class CategoryController {
     private final CategoryService categoryService;
 
