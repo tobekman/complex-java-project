@@ -1,4 +1,4 @@
-package se.iths.complexjavaproject.DTO;
+package se.iths.complexjavaproject.entity.DTO;
 
 import se.iths.complexjavaproject.entity.Address;
 import se.iths.complexjavaproject.entity.Order;

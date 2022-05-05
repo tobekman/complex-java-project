@@ -21,12 +21,19 @@ public class User {
     @OneToOne(cascade = CascadeType.PERSIST)
     private Address address;
     private String fullName;
-    @ManyToMany(fetch=FetchType.EAGER, cascade = CascadeType.PERSIST)
+    @ManyToMany(fetch=FetchType.EAGER, cascade = CascadeType.MERGE)
     @JsonIgnore
     private Set<Role> roles = new HashSet<>();
 
     public User() {
 
+    }
+
+    public User(String username, String password, String email, String fullName) {
+        this.username = username;
+        this.password = password;
+        this.email = email;
+        this.fullName = fullName;
     }
 
     public void addRole(Role role) {
@@ -76,6 +83,7 @@ public class User {
     }
 
     public void setAddress(Address address) {
+        address.setUser(this);
         this.address = address;
     }
 

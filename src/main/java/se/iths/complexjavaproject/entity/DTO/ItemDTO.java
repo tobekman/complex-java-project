@@ -1,4 +1,4 @@
-package se.iths.complexjavaproject.DTO;
+package se.iths.complexjavaproject.entity.DTO;
 import java.util.Set;
 
 public class ItemDTO {

@@ -16,12 +16,17 @@ public class Role {
 
     @ManyToMany(mappedBy = "roles")
     @JsonIgnore
-    private Set<User> users;
+    private Set<User> users = new HashSet<>();
 
     public Role() {
     }
 
     public Role(String name) {
+        this.name = name;
+    }
+
+    public Role(Long id, String name) {
+        this.id = id;
         this.name = name;
     }
 

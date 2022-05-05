@@ -30,4 +30,6 @@ public class GlobalExceptionHandler extends ResponseEntityExceptionHandler {
         ApiError error = new ApiError(HttpStatus.BAD_REQUEST, "Malformed JSON request");
         return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(error);
     }
+
+
 }

@@ -1,7 +1,10 @@
 package se.iths.complexjavaproject.entity;
 
+import org.springframework.beans.factory.annotation.Value;
+
 import javax.persistence.*;
 import java.time.LocalDate;
+import java.util.HashSet;
 import java.util.Set;
 
 @Entity
@@ -10,16 +13,20 @@ public class Order {
     @Id
     @GeneratedValue(strategy = GenerationType.AUTO)
     private Long id;
-    @ManyToMany(fetch = FetchType.EAGER)
-    private Set<Item> items;
     private double orderPrice;
     private LocalDate createdAt;
     @ManyToOne
     private User user;
+    @OneToOne(cascade = CascadeType.PERSIST)
+    private Cart cart;
 
     @PrePersist
     public void getCurrentDate() {
         setCreatedAt(LocalDate.now());
+    }
+
+    public void addItem(Item item) {
+
     }
 
     public Long getId() {
@@ -46,19 +53,19 @@ public class Order {
         this.createdAt = createdAt;
     }
 
-    public Set<Item> getItems() {
-        return items;
-    }
-
-    public void setItems(Set<Item> items) {
-        this.items = items;
-    }
-
     public User getUser() {
         return user;
     }
 
     public void setUser(User user) {
         this.user = user;
+    }
+
+    public Cart getCart() {
+        return cart;
+    }
+
+    public void setCart(Cart cart) {
+        this.cart = cart;
     }
 }

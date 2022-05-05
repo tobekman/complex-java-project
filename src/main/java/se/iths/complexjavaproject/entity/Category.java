@@ -1,6 +1,7 @@
 package se.iths.complexjavaproject.entity;
 
 import javax.persistence.*;
+import java.util.HashSet;
 import java.util.Set;
 
 @Entity
@@ -11,9 +12,13 @@ public class Category {
     private Long id;
     private String name;
     @ManyToMany(mappedBy = "categories")
-    private Set<Item> items;
+    private Set<Item> items = new HashSet<>();
 
     public Category() {
+    }
+
+    public Category(String name) {
+        this.name = name;
     }
 
     public Long getId() {

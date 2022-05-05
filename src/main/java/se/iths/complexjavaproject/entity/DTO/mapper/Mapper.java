@@ -1,9 +1,9 @@
-package se.iths.complexjavaproject.DTO.mapper;
+package se.iths.complexjavaproject.entity.DTO.mapper;
 
 import org.springframework.stereotype.Component;
-import se.iths.complexjavaproject.DTO.ItemDTO;
-import se.iths.complexjavaproject.DTO.OrderDTO;
-import se.iths.complexjavaproject.DTO.UserDTO;
+import se.iths.complexjavaproject.entity.DTO.ItemDTO;
+import se.iths.complexjavaproject.entity.DTO.OrderDTO;
+import se.iths.complexjavaproject.entity.DTO.UserDTO;
 import se.iths.complexjavaproject.entity.Category;
 import se.iths.complexjavaproject.entity.Item;
 import se.iths.complexjavaproject.entity.Order;
@@ -48,7 +48,7 @@ public class Mapper {
             String createdAt = String.valueOf(((Order) t).getCreatedAt());
 
 
-            List<Long> orderItems = ((Order) t).getItems().stream().map(Item::getId).collect(toList());
+            List<Long> orderItems = ((Order) t).getCart().getItems().stream().map(Item::getId).collect(toList());
             return new OrderDTO(id, orderPrice, createdAt, userId, orderItems);
         }
 

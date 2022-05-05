@@ -35,9 +35,9 @@ public class Sender {
         }
 
         List<MessageItem> items = new ArrayList<>();
-
-        if(order.getItems() != null) {
-            for (Item item : order.getItems()) {
+        List<Item> itemsInOrder = order.getCart().getItems();
+        if(itemsInOrder != null) {
+            for (Item item : itemsInOrder) {
                 MessageItem messageItem = new MessageItem(item.getName(), item.getPrice());
                 items.add(messageItem);
             }

@@ -3,8 +3,8 @@ package se.iths.complexjavaproject.controller;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
-import se.iths.complexjavaproject.DTO.mapper.Mapper;
-import se.iths.complexjavaproject.DTO.ItemDTO;
+import se.iths.complexjavaproject.entity.DTO.mapper.Mapper;
+import se.iths.complexjavaproject.entity.DTO.ItemDTO;
 import se.iths.complexjavaproject.entity.Item;
 import se.iths.complexjavaproject.service.ItemService;
 
@@ -29,7 +29,7 @@ public class ItemController {
 
     @PostMapping
     public ResponseEntity<ItemDTO> createItem(@RequestBody Item item) {
-        Item createdItem = itemService.createItem(item);
+        itemService.createItem(item);
         ItemDTO itemDTO = (ItemDTO) mapper.toDto(item);
         return new ResponseEntity<>(itemDTO, HttpStatus.CREATED);
     }

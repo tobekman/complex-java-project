@@ -3,6 +3,7 @@ package se.iths.complexjavaproject.entity;
 import com.fasterxml.jackson.annotation.JsonIgnore;
 
 import javax.persistence.*;
+import java.util.HashSet;
 import java.util.Set;
 
 @Entity
@@ -12,12 +13,26 @@ public class Item {
     @GeneratedValue(strategy = GenerationType.AUTO)
     private Long id;
     private String name;
-    @ManyToMany(cascade = CascadeType.PERSIST)
+    @ManyToMany(cascade = CascadeType.MERGE)
     @JsonIgnore
-    private Set<Category> categories;
+    private Set<Category> categories = new HashSet<>();
     private double price;
 
+    @ManyToMany(mappedBy = "items")
+    @JsonIgnore
+    Set<Cart> carts = new HashSet<>();
+
     public Item() {
+    }
+
+    public Item(String name, double price) {
+        this.name = name;
+        this.price = price;
+    }
+
+    public void addCategory(Category category) {
+        categories.add(category);
+        category.getItems().add(this);
     }
 
     public Long getId() {
@@ -50,5 +65,13 @@ public class Item {
 
     public void setPrice(double price) {
         this.price = price;
+    }
+
+    public Set<Cart> getCarts() {
+        return carts;
+    }
+
+    public void setCarts(Set<Cart> carts) {
+        this.carts = carts;
     }
 }
