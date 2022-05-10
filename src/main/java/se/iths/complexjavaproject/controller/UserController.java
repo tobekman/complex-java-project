@@ -63,4 +63,18 @@ public class UserController {
 
         return new ResponseEntity<>(usersToDTO, HttpStatus.OK);
     }
+
+    @PreAuthorize("hasRole('ADMIN')")
+    @PutMapping
+    public ResponseEntity<UserDTO> updateUser(@RequestBody User user){
+        if(userService.getUserById(user.getId()).isEmpty()){
+            throw new UserNotFoundException("User with id does not exist - please create new user");
+        }
+        else{
+            userService.createUser(user);
+            UserDTO userDTO = (UserDTO) mapper.toDto(user);
+            return new ResponseEntity<>(userDTO,HttpStatus.OK);
+        }
+
+    }
 }

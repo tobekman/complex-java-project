@@ -1,5 +1,7 @@
 package se.iths.complexjavaproject.service;
 
+import org.springframework.boot.web.server.WebServerException;
+import org.springframework.http.HttpStatus;
 import se.iths.complexjavaproject.entity.Order;
 import org.springframework.stereotype.Service;
 import se.iths.complexjavaproject.repository.OrderRepository;
@@ -23,8 +25,11 @@ public class OrderService {
 
     public Optional<Order> getOrderById(Long id){return orderRepository.findById(id);}
 
-    public void deleteOrder(Long id){Order result = orderRepository.findById(id).orElseThrow(EntityExistsException::new);
-        orderRepository.deleteById(result.getId());}
+    public void deleteOrder(Long id){
+        Order result = orderRepository.findById(id).orElseThrow(EntityExistsException::new);
+        orderRepository.deleteById(result.getId());
+        }
+
 
     public Iterable<Order> getAllOrders(){return orderRepository.findAll();}
 }
