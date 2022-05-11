@@ -10,7 +10,7 @@ services:
       - "8161:8161"
       - "61616:61616"
   mysql:
-    image: mysql:oracle
+    image: mysql:latest
     environment:
       - MYSQL_ROOT_PASSWORD=root
       - MYSQL_ROOT_HOST=%
