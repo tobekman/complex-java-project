@@ -13,6 +13,7 @@ import org.springframework.web.bind.annotation.RestController;
 import se.iths.complexjavaproject.auth.jwt.JwtProvider;
 import se.iths.complexjavaproject.auth.jwt.JwtResponse;
 import se.iths.complexjavaproject.entity.User;
+import se.iths.complexjavaproject.exception.EntityNotFoundException;
 import se.iths.complexjavaproject.exception.UserAlreadyExistsException;
 import se.iths.complexjavaproject.service.UserService;
 
@@ -32,7 +33,7 @@ public class AuthController {
         this.userService = userService;
     }
 
-    @PostMapping("signin")
+    @PostMapping("login")
     public ResponseEntity<JwtResponse> authenticateUser(@RequestBody User user) {
         Authentication authentication = authenticationManager.authenticate(new UsernamePasswordAuthenticationToken(user.getUsername(), user.getPassword()));
         SecurityContextHolder.getContext().setAuthentication(authentication);

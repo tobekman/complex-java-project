@@ -1,5 +1,7 @@
 package se.iths.complexjavaproject.entity;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
+
 import javax.persistence.*;
 import java.util.HashSet;
 import java.util.Set;
@@ -12,6 +14,7 @@ public class Category {
     private Long id;
     private String name;
     @ManyToMany(mappedBy = "categories")
+    @JsonIgnore
     private Set<Item> items = new HashSet<>();
 
     public Category() {
@@ -54,10 +57,6 @@ public class Category {
 
     @Override
     public String toString() {
-        return "Category{" +
-                "id=" + id +
-                ", name='" + name + '\'' +
-                ", items=" + items +
-                '}';
+        return name;
     }
 }

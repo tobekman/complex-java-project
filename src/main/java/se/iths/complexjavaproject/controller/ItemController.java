@@ -8,6 +8,7 @@ import org.springframework.web.bind.annotation.*;
 import se.iths.complexjavaproject.entity.DTO.mapper.Mapper;
 import se.iths.complexjavaproject.entity.DTO.ItemDTO;
 import se.iths.complexjavaproject.entity.Item;
+import se.iths.complexjavaproject.exception.EntityNotFoundException;
 import se.iths.complexjavaproject.service.ItemService;
 import java.io.FileNotFoundException;
 import java.util.List;
@@ -37,7 +38,7 @@ public class ItemController {
 
     @GetMapping("{id}")
     public ResponseEntity<ItemDTO> getItemById(@PathVariable Long id) throws FileNotFoundException {
-        Item foundItem = itemService.getItemById(id).orElseThrow(FileNotFoundException::new);
+        Item foundItem = itemService.getItemById(id).orElseThrow(() -> new EntityNotFoundException("Item with id: " + id + " is not found in database."));
         ItemDTO itemDTO = (ItemDTO) mapper.toDto(foundItem);
         return new ResponseEntity<>(itemDTO, HttpStatus.FOUND);
 
@@ -46,7 +47,7 @@ public class ItemController {
     @PreAuthorize("hasRole('ADMIN')")
     @DeleteMapping("{id}")
     public ResponseEntity<Void> deleteItemById(@PathVariable Long id) throws FileNotFoundException {
-        Item foundItem = itemService.getItemById(id).orElseThrow(FileNotFoundException::new);
+        Item foundItem = itemService.getItemById(id).orElseThrow(() -> new EntityNotFoundException("Item with id: " + id + " is not found in database."));
         itemService.deleteItem(foundItem.getId());
         return new ResponseEntity<>(HttpStatus.NO_CONTENT);
     }
@@ -62,7 +63,7 @@ public class ItemController {
     @PutMapping
     public ResponseEntity<ItemDTO> updateItem(@RequestBody Item item) throws FileNotFoundException {
         if(itemService.getItemById(item.getId()).isEmpty()){
-            throw new FileNotFoundException();
+            throw new EntityNotFoundException("Item is not found in database.");
         }else{
             itemService.createItem(item);
             ItemDTO itemDTO = (ItemDTO) mapper.toDto(item);

@@ -10,7 +10,7 @@ import se.iths.complexjavaproject.entity.Order;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import se.iths.complexjavaproject.entity.User;
-import se.iths.complexjavaproject.exception.UserNotFoundException;
+import se.iths.complexjavaproject.exception.EntityNotFoundException;
 import se.iths.complexjavaproject.jms.sender.Sender;
 import se.iths.complexjavaproject.service.OrderService;
 import se.iths.complexjavaproject.service.UserService;
@@ -43,7 +43,7 @@ public class OrderController {
         Optional<User> user = userService.getUserById(userId);
 
         if (user.isEmpty()) {
-            throw new UserNotFoundException("User with id: " + userId + " is not found in database.");
+            throw new EntityNotFoundException("User with id: " + userId + " is not found in database.");
         }
 
         Order createdOrder = new Order();
@@ -70,19 +70,21 @@ public class OrderController {
     @PreAuthorize("hasRole('ADMIN')")
     @GetMapping("{id}")
     public ResponseEntity<OrderDTO> getOrderById(@PathVariable Long id){
-        if (orderService.getOrderById(id).isEmpty()) {
-            return new ResponseEntity<>(HttpStatus.NOT_FOUND);
+        Optional<Order> order = orderService.getOrderById(id);
+        if (order.isPresent()) {
+            Order newOrder = order.get();
+            OrderDTO orderDTO = (OrderDTO) mapper.toDto(newOrder);
+            return new ResponseEntity<>(orderDTO, HttpStatus.FOUND);
         }
         else {
-            OrderDTO orderDTO = (OrderDTO) mapper.toDto(orderService.getOrderById(id));
-            return new ResponseEntity<>(orderDTO, HttpStatus.FOUND);
+            throw new EntityNotFoundException("Order with id: " + id + " is not found in database.");
         }
     }
 
     @PreAuthorize("hasRole('ADMIN')")
     @DeleteMapping("{id}")
     public ResponseEntity<Void> deleteOrderById(@PathVariable Long id) throws FileNotFoundException {
-        Order foundOrder = orderService.getOrderById(id).orElseThrow(FileNotFoundException::new);
+        Order foundOrder = orderService.getOrderById(id).orElseThrow(() -> new EntityNotFoundException("Order with id: " + id + " is not found in database."));
         orderService.deleteOrder(foundOrder.getId());
         return new ResponseEntity<>(HttpStatus.NO_CONTENT);
     }

@@ -5,7 +5,7 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.*;
 import se.iths.complexjavaproject.entity.Address;
-import se.iths.complexjavaproject.exception.UserNotFoundException;
+import se.iths.complexjavaproject.exception.EntityNotFoundException;
 import se.iths.complexjavaproject.service.AddressService;
 import java.io.FileNotFoundException;
 
@@ -25,7 +25,7 @@ public class AddressController {
     @PreAuthorize("hasRole('ADMIN')")
     @GetMapping("{id}")
     public ResponseEntity<Address> getById(@PathVariable Long id) throws FileNotFoundException {
-        Address foundAddress = addressService.getAddressById(id).orElseThrow(FileNotFoundException::new);
+        Address foundAddress = addressService.getAddressById(id).orElseThrow(() -> new EntityNotFoundException("Address with id: " + id + " is not found in database."));
         return new ResponseEntity<>(foundAddress, HttpStatus.FOUND);
 
     }
@@ -33,7 +33,7 @@ public class AddressController {
     @PreAuthorize("hasRole('ADMIN')")
     @DeleteMapping("{id}")
     public ResponseEntity<Void> deleteById(@PathVariable Long id) throws FileNotFoundException {
-        Address foundAddress = addressService.getAddressById(id).orElseThrow(FileNotFoundException::new);
+        Address foundAddress = addressService.getAddressById(id).orElseThrow(() -> new EntityNotFoundException("Address with id: " + id + " is not found in database."));
         addressService.deleteAddress(foundAddress.getId());
         return new ResponseEntity<>(HttpStatus.NO_CONTENT);
     }
@@ -48,7 +48,7 @@ public class AddressController {
     @PutMapping
     public ResponseEntity<Address> update(@RequestBody Address address){
         if(addressService.getAddressById(address.getId()).isEmpty()){
-            throw new UserNotFoundException("address with id does not exist - please create new address");
+            throw new EntityNotFoundException("address with id does not exist - please create new address");
         }
         else{
             addressService.createAddress(address);

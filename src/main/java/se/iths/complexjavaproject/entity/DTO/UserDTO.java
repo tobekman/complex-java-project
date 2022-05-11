@@ -15,6 +15,9 @@ public class UserDTO {
     private Set<Long> orders;
 
 
+    public UserDTO() {
+    }
+
     public UserDTO(String fullname, String username, String email, String address, Set<Long> orders) {
         this.fullname = fullname;
         this.username = username;

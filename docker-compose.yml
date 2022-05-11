@@ -1,0 +1,49 @@
+version: "3.9"
+services:
+  activemq:
+    image: rmohr/activemq
+    environment:
+      ACTIVEMQ_ADMIN_LOGIN: admin
+      ACTIVEMQ_ADMIN_PASSWORD: admin
+    container_name: activemq
+    ports:
+      - "8161:8161"
+      - "61616:61616"
+  mysql:
+    image: mysql:oracle
+    environment:
+      - MYSQL_ROOT_PASSWORD=root
+      - MYSQL_ROOT_HOST=%
+      - MYSQL_DATABASE=test
+      - MYSQL_USER=user
+      - MYSQL_PASSWORD=password
+    container_name: mysql
+    ports:
+      - "3306:3306"
+  jms-receiver:
+    build:
+      context: ./../receiver/complex-java-project
+      dockerfile: Dockerfile
+    image: my-jms-receiver
+    container_name: jms-receiver
+    depends_on:
+      - activemq
+    environment:
+      SPRING_ACTIVEMQ_BROKER_URL: tcp://activemq:61616
+  rest-api:
+    build:
+      context: .
+      dockerfile: Dockerfile
+    image: my-rest-api
+    container_name: rest-api
+    ports:
+      - "8080:8080"
+    restart: "unless-stopped"
+    depends_on:
+      - mysql
+      - activemq
+    environment:
+      SPRING_DATASOURCE_URL: jdbc:mysql://mysql:3306/test
+      SPRING_DATASOURCE_USERNAME: user
+      SPRING_DATASOURCE_PASSWORD: password
+      SPRING_ACTIVEMQ_BROKER_URL: tcp://activemq:61616

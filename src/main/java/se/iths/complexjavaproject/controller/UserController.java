@@ -4,16 +4,19 @@ import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.*;
 import se.iths.complexjavaproject.entity.DTO.UserDTO;
 import se.iths.complexjavaproject.entity.DTO.mapper.Mapper;
+import se.iths.complexjavaproject.entity.Order;
 import se.iths.complexjavaproject.entity.User;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
-import se.iths.complexjavaproject.exception.UserNotFoundException;
+import se.iths.complexjavaproject.exception.EntityNotFoundException;
 import se.iths.complexjavaproject.service.UserService;
 
 import java.io.FileNotFoundException;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
+
+import static java.util.stream.Collectors.toSet;
 
 @RestController
 @RequestMapping("/users")
@@ -27,17 +30,16 @@ public class UserController {
         this.mapper = mapper;
     }
 
-
-    @PreAuthorize("hasAnyRole('USER', 'ADMIN')")
     @GetMapping("{id}")
-    public ResponseEntity<Optional<UserDTO>> getUserById(@PathVariable Long id){
+    public ResponseEntity<UserDTO> getUserById(@PathVariable Long id){
         Optional<User> foundUser = userService.getUserById(id);
-
-        if(foundUser.isEmpty()) {
-            throw new UserNotFoundException("User with id: " + id + " is not found in database.");
+        UserDTO userDTO;
+        if(foundUser.isPresent()) {
+            User newUser = foundUser.get();
+            userDTO = (UserDTO) mapper.toDto(newUser);
+        } else {
+            throw new EntityNotFoundException("User with id: " + id + " is not found in database.");
         }
-
-        Optional<UserDTO> userDTO = (Optional<UserDTO>) mapper.toDto(foundUser);
 
         return new ResponseEntity<>(userDTO, HttpStatus.FOUND);
 
@@ -46,12 +48,12 @@ public class UserController {
     @PreAuthorize("hasRole('ADMIN')")
     @DeleteMapping("{id}")
     public ResponseEntity<Void> deleteUserById(@PathVariable Long id) throws FileNotFoundException {
-        User foundUser = userService.getUserById(id).orElseThrow(FileNotFoundException::new);
+        User foundUser = userService.getUserById(id).orElseThrow(() -> new EntityNotFoundException("User with id: " + id + " is not found in database."));
         userService.deleteUser(foundUser.getId());
         return new ResponseEntity<>(HttpStatus.NO_CONTENT);
     }
 
-    @PreAuthorize("hasAnyRole('USER', 'ADMIN')")
+    @PreAuthorize("hasRole('ADMIN')")
     @GetMapping
     public ResponseEntity<Iterable<UserDTO>> findAllUsers() {
         Iterable<User> allUsers = userService.getAllUsers();
@@ -68,7 +70,7 @@ public class UserController {
     @PutMapping
     public ResponseEntity<UserDTO> updateUser(@RequestBody User user){
         if(userService.getUserById(user.getId()).isEmpty()){
-            throw new UserNotFoundException("User with id does not exist - please create new user");
+            throw new EntityNotFoundException("User with id does not exist - please create new user");
         }
         else{
             userService.createUser(user);
