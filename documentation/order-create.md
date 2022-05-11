@@ -2,7 +2,7 @@
 
 **URL** : `api/1.0/order?userId=:pk`
 
-**Query Parameters** : `pk=[integer]` where `pk` is the ID of the item in the
+**Query Parameters** : `pk=[integer]` where `pk` is the ID of the order in the
 database.
 
 **Method** : `POST`
