@@ -10,7 +10,7 @@ services:
       - "8161:8161"
       - "61616:61616"
   mysql:
-    image: mysql:latest
+    image: mysql:oracle
     environment:
       - MYSQL_ROOT_PASSWORD=root
       - MYSQL_ROOT_HOST=%
@@ -22,7 +22,7 @@ services:
       - "3306:3306"
   jms-receiver:
     build:
-      context: ./../receiver/complex-java-project
+      context: ./../complex-java-project-jmsreceiver/
       dockerfile: Dockerfile
     image: my-jms-receiver
     container_name: jms-receiver
